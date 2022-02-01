@@ -1,0 +1,18 @@
+Dependencies for Project 'exemplo', Target 'Target 1': (DO NOT MODIFY !)
+F (.\startup.s)(0x5ACFC0D1)(--cpu Cortex-M4.fp --pd "__EVAL SETA 1" -g --apcs=interwork -I C:\Keil_v5\ARM\RV31\INC-I C:\Keil_v5\ARM\CMSIS\Include-I Device\Include\TM4C129--pd "__UVISION_VERSION SETA 518"--list .\listings\startup.lst --xref -o .\objects\startup.o --depend .\objects\startup.d)
+F (.\utils.s)(0x5AAFF0A7)(--cpu Cortex-M4.fp --pd "__EVAL SETA 1" -g --apcs=interwork -I C:\Keil_v5\ARM\RV31\INC-I C:\Keil_v5\ARM\CMSIS\Include-I Device\Include\TM4C129--pd "__UVISION_VERSION SETA 518"--list .\listings\utils.lst --xref -o .\objects\utils.o --depend .\objects\utils.d)
+F (.\main.c)(0x5CED914B)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections-I C:\Keil_v5\ARM\RV31\INC-I C:\Keil_v5\ARM\CMSIS\Include-I Device\Include\TM4C129-D__UVISION_VERSION="518" -DTM4C1294NCPDT-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x569E68CA)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x569E68CA)
+I (tm4c1294ncpdt.h)(0x5AA9925D)
+F (.\tm4c1294ncpdt.h)(0x5AA9925D)()
+F (.\gpio.c)(0x5CED8909)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections-I C:\Keil_v5\ARM\RV31\INC-I C:\Keil_v5\ARM\CMSIS\Include-I Device\Include\TM4C129-D__UVISION_VERSION="518" -DTM4C1294NCPDT-o .\objects\gpio.o --omf_browse .\objects\gpio.crf --depend .\objects\gpio.d)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x569E68CA)
+I (tm4c1294ncpdt.h)(0x5AA9925D)
+F (.\ConversorAD.c)(0x5CEBF00C)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections-I C:\Keil_v5\ARM\RV31\INC-I C:\Keil_v5\ARM\CMSIS\Include-I Device\Include\TM4C129-D__UVISION_VERSION="518" -DTM4C1294NCPDT-o .\objects\conversorad.o --omf_browse .\objects\conversorad.crf --depend .\objects\conversorad.d)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x569E68CA)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x569E68CA)
+I (tm4c1294ncpdt.h)(0x5AA9925D)
+F (.\Display.c)(0x5CED3AE6)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections-I C:\Keil_v5\ARM\RV31\INC-I C:\Keil_v5\ARM\CMSIS\Include-I Device\Include\TM4C129-D__UVISION_VERSION="518" -DTM4C1294NCPDT-o .\objects\display.o --omf_browse .\objects\display.crf --depend .\objects\display.d)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x569E68CA)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x569E68CA)

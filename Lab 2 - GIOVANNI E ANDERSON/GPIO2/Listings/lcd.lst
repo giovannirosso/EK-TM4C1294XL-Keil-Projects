@@ -1,0 +1,384 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ;------------Constantes------------
+    2 00000000         
+    3 00000000         
+    4 00000000         ;------------Área de Código------------
+    5 00000000         ;Tudo abaixo da diretiva a seguir será armazenado na mem
+                       ória de código
+    6 00000000         
+    7 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+    8 00000000                 THUMB
+    9 00000000         
+   10 00000000                 IMPORT           SysTick_Init
+   11 00000000                 IMPORT           SysTick_Wait1ms
+   12 00000000                 IMPORT           SysTick_Wait1us
+   13 00000000                 IMPORT           PortA_Output ; Permite chamar P
+                                                            ortA_Output de outr
+                                                            o arquivo
+   14 00000000                 IMPORT           PortB_Output ; Permite chamar P
+                                                            ortB_Output de outr
+                                                            o arquivo
+   15 00000000                 IMPORT           PortP_Output ; Permite chamar P
+                                                            ortP_Output de outr
+                                                            o arquivo
+   16 00000000                 IMPORT           PortQ_Output ; Permite chamar P
+                                                            ortQ_Output de outr
+                                                            o arquivo
+   17 00000000                 IMPORT           PortK_Output ; Permite chamar P
+                                                            ortK_Output de outr
+                                                            o arquivo
+   18 00000000                 IMPORT           PortM_Output ; Permite chamar P
+                                                            ortM_Output de outr
+                                                            o arquivo 
+   19 00000000                 IMPORT           PortN_Output ; Permite chamar P
+                                                            ortM_Output de outr
+                                                            o arquivo
+   20 00000000                 IMPORT           PortJ_Input ; Permite chamar Po
+                                                            rtJ_Input de outro 
+                                                            arquivo
+   21 00000000                 IMPORT           PortL_Input ; Permite chamar Po
+                                                            rtL_Input de outro 
+                                                            arquivo
+   22 00000000                 EXPORT           LCD_Inst
+   23 00000000                 EXPORT           LCD_Dado
+   24 00000000                 EXPORT           LCD_rst
+   25 00000000                 EXPORT           LCDlinha_2
+   26 00000000                 EXPORT           LCD_escreve
+   27 00000000                 EXPORT           LCD_Init
+   28 00000000         
+   29 00000000                 ALIGN
+   30 00000000         
+   31 00000000         ;------------LCD_Init------------
+   32 00000000         
+   33 00000000         LCD_Init
+   34 00000000 B500            PUSH             {LR}
+   35 00000002 F04F 0338       MOV              R3, #0x38   ; Inicializar o mod
+                                                            o 2 linhas
+   36 00000006 F7FF FFFE       BL               LCD_Inst
+   37 0000000A F04F 0306       MOV              R3, #0x06   ; Cursor com autoin
+                                                            cremento para a dir
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+                                                            eita
+   38 0000000E F7FF FFFE       BL               LCD_Inst
+   39 00000012 F04F 030E       MOV              R3, #0x0E   ; Configurar cursor
+                                                             (habilita o diplay
+                                                             + cursor + pisca)
+   40 00000016 F7FF FFFE       BL               LCD_Inst
+   41 0000001A F04F 0301       MOV              R3, #0x01   ; Limpar o display 
+                                                            e levar o cursor pa
+                                                            ra home
+   42 0000001E F7FF FFFE       BL               LCD_Inst
+   43 00000022 F85D EB04       POP              {LR}
+   44 00000026 4770            BX               LR
+   45 00000028         
+   46 00000028         LCD_Inst
+   47 00000028 B500            PUSH             {LR}
+   48 0000002A F04F 0004       MOV              R0, #2_00000100 ;Modo INSTRUÇÃO
+                                                             ativo (RS=0 , RW=0
+                                                             , EN=1)
+   49 0000002E F7FF FFFE       BL               PortM_Output
+   50 00000032 4618            MOV              R0, R3
+   51 00000034 F7FF FFFE       BL               PortK_Output
+   52 00000038 F04F 000A       MOV              R0, #10
+   53 0000003C F7FF FFFE       BL               SysTick_Wait1ms ;Delay para a i
+                                                            nstrução ser execut
+                                                            ada
+   54 00000040 F04F 0000       MOV              R0, #2_00000000 ;Modo comando d
+                                                            esativo (RS=0 , RW=
+                                                            0 , EN=0)
+   55 00000044 F7FF FFFE       BL               PortM_Output
+   56 00000048 F85D EB04       POP              {LR}
+   57 0000004C 4770            BX               LR
+   58 0000004E         
+   59 0000004E         LCD_Dado
+   60 0000004E B500            PUSH             {LR}
+   61 00000050 F04F 0005       MOV              R0, #2_00000101 ;Modo DADO ativ
+                                                            o (RS=1 , RW=0 , EN
+                                                            =1)
+   62 00000054 F7FF FFFE       BL               PortM_Output
+   63 00000058 4618            MOV              R0, R3
+   64 0000005A F7FF FFFE       BL               PortK_Output
+   65 0000005E F04F 000A       MOV              R0, #10
+   66 00000062 F7FF FFFE       BL               SysTick_Wait1ms ;Delay para a i
+                                                            nstrução ser execut
+                                                            ada
+   67 00000066 F04F 0000       MOV              R0, #2_00000000 ;Modo DADO desa
+                                                            tivo (RS=0 , RW=0 ,
+                                                             EN=0)
+   68 0000006A F7FF FFFE       BL               PortM_Output
+   69 0000006E F85D EB04       POP              {LR}
+   70 00000072 4770            BX               LR
+   71 00000074         
+   72 00000074         LCD_rst
+   73 00000074 B500            PUSH             {LR}
+   74 00000076 F04F 0301       MOV              R3, #0x01   ;Limpar o display e
+                                                             levar o cursor par
+                                                            a home
+   75 0000007A F7FF FFFE       BL               LCD_Inst
+   76 0000007E F04F 000A       MOV              R0, #10
+   77 00000082 F7FF FFFE       BL               SysTick_Wait1ms ;Delay para a i
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+                                                            nstrução ser execut
+                                                            ada
+   78 00000086 F85D EB04       POP              {LR}
+   79 0000008A 4770            BX               LR
+   80 0000008C         
+   81 0000008C         LCDlinha_2
+   82 0000008C B500            PUSH             {LR}
+   83 0000008E F04F 03C0       MOV              R3, #0xC0
+   84 00000092 F7FF FFFE       BL               LCD_Inst
+   85 00000096 F04F 000A       MOV              R0, #10
+   86 0000009A F7FF FFFE       BL               SysTick_Wait1ms
+   87 0000009E F85D EB04       POP              {LR}
+   88 000000A2 4770            BX               LR
+   89 000000A4         
+   90 000000A4         LCD_escreve
+   91 000000A4 B500            PUSH             {LR}
+   92 000000A6         LCD_escreve_b
+   93 000000A6 F814 3B01       LDRB             R3,[R4],#1
+   94 000000AA 2B00            CMP              R3,#0
+   95 000000AC D002            BEQ              LCD_fim
+   96 000000AE F7FF FFFE       BL               LCD_Dado
+   97 000000B2 E7F8            B                LCD_escreve_b
+   98 000000B4         LCD_fim
+   99 000000B4 F04F 000A       MOV              R0, #10
+  100 000000B8 F7FF FFFE       BL               SysTick_Wait1ms
+  101 000000BC F85D EB04       POP              {LR}
+  102 000000C0 4770            BX               LR
+  103 000000C2         
+  104 000000C2         
+  105 000000C2 00 00           ALIGN                        ;Garante que o fim 
+                                                            da seção está alinh
+                                                            ada 
+  106 000000C4                 END                          ;Fim do arquivo
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\lcd.d -o.\objects\lcd.o -I.\RTE\_Target_1 -ID:\Keil\A
+RM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 -ID:\Keil\ARM\CMSIS\Include 
+--predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 526" --predefin
+e="TM4C1294NCPDT SETA 1" --list=.\listings\lcd.lst lcd.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 7 in file lcd.s
+   Uses
+      None
+Comment: .text unused
+LCD_Dado 0000004E
+
+Symbol: LCD_Dado
+   Definitions
+      At line 59 in file lcd.s
+   Uses
+      At line 23 in file lcd.s
+      At line 96 in file lcd.s
+
+LCD_Init 00000000
+
+Symbol: LCD_Init
+   Definitions
+      At line 33 in file lcd.s
+   Uses
+      At line 27 in file lcd.s
+Comment: LCD_Init used once
+LCD_Inst 00000028
+
+Symbol: LCD_Inst
+   Definitions
+      At line 46 in file lcd.s
+   Uses
+      At line 22 in file lcd.s
+      At line 36 in file lcd.s
+      At line 38 in file lcd.s
+      At line 40 in file lcd.s
+      At line 42 in file lcd.s
+      At line 75 in file lcd.s
+      At line 84 in file lcd.s
+
+LCD_escreve 000000A4
+
+Symbol: LCD_escreve
+   Definitions
+      At line 90 in file lcd.s
+   Uses
+      At line 26 in file lcd.s
+Comment: LCD_escreve used once
+LCD_escreve_b 000000A6
+
+Symbol: LCD_escreve_b
+   Definitions
+      At line 92 in file lcd.s
+   Uses
+      At line 97 in file lcd.s
+Comment: LCD_escreve_b used once
+LCD_fim 000000B4
+
+Symbol: LCD_fim
+   Definitions
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 98 in file lcd.s
+   Uses
+      At line 95 in file lcd.s
+Comment: LCD_fim used once
+LCD_rst 00000074
+
+Symbol: LCD_rst
+   Definitions
+      At line 72 in file lcd.s
+   Uses
+      At line 24 in file lcd.s
+Comment: LCD_rst used once
+LCDlinha_2 0000008C
+
+Symbol: LCDlinha_2
+   Definitions
+      At line 81 in file lcd.s
+   Uses
+      At line 25 in file lcd.s
+Comment: LCDlinha_2 used once
+9 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+PortA_Output 00000000
+
+Symbol: PortA_Output
+   Definitions
+      At line 13 in file lcd.s
+   Uses
+      None
+Comment: PortA_Output unused
+PortB_Output 00000000
+
+Symbol: PortB_Output
+   Definitions
+      At line 14 in file lcd.s
+   Uses
+      None
+Comment: PortB_Output unused
+PortJ_Input 00000000
+
+Symbol: PortJ_Input
+   Definitions
+      At line 20 in file lcd.s
+   Uses
+      None
+Comment: PortJ_Input unused
+PortK_Output 00000000
+
+Symbol: PortK_Output
+   Definitions
+      At line 17 in file lcd.s
+   Uses
+      At line 51 in file lcd.s
+      At line 64 in file lcd.s
+
+PortL_Input 00000000
+
+Symbol: PortL_Input
+   Definitions
+      At line 21 in file lcd.s
+   Uses
+      None
+Comment: PortL_Input unused
+PortM_Output 00000000
+
+Symbol: PortM_Output
+   Definitions
+      At line 18 in file lcd.s
+   Uses
+      At line 49 in file lcd.s
+      At line 55 in file lcd.s
+      At line 62 in file lcd.s
+      At line 68 in file lcd.s
+
+PortN_Output 00000000
+
+Symbol: PortN_Output
+   Definitions
+      At line 19 in file lcd.s
+   Uses
+      None
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+External symbols
+
+Comment: PortN_Output unused
+PortP_Output 00000000
+
+Symbol: PortP_Output
+   Definitions
+      At line 15 in file lcd.s
+   Uses
+      None
+Comment: PortP_Output unused
+PortQ_Output 00000000
+
+Symbol: PortQ_Output
+   Definitions
+      At line 16 in file lcd.s
+   Uses
+      None
+Comment: PortQ_Output unused
+SysTick_Init 00000000
+
+Symbol: SysTick_Init
+   Definitions
+      At line 10 in file lcd.s
+   Uses
+      None
+Comment: SysTick_Init unused
+SysTick_Wait1ms 00000000
+
+Symbol: SysTick_Wait1ms
+   Definitions
+      At line 11 in file lcd.s
+   Uses
+      At line 53 in file lcd.s
+      At line 66 in file lcd.s
+      At line 77 in file lcd.s
+      At line 86 in file lcd.s
+      At line 100 in file lcd.s
+
+SysTick_Wait1us 00000000
+
+Symbol: SysTick_Wait1us
+   Definitions
+      At line 12 in file lcd.s
+   Uses
+      None
+Comment: SysTick_Wait1us unused
+12 symbols
+355 symbols in table

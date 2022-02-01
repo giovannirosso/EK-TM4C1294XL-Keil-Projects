@@ -1,0 +1,107 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; Exemplo.s
+    2 00000000         ; Desenvolvido para a placa EK-TM4C1294XL
+    3 00000000         ; Prof. Guilherme Peron
+    4 00000000         ; 12/03/2018
+    5 00000000         
+    6 00000000         
+    7 00000000         ; ------------------------------------------------------
+                       -------------------------
+    8 00000000         ; Declarações EQU
+    9 00000000         ;<NOME>         EQU <VALOR>
+   10 00000000         
+   11 00000000         ; ------------------------------------------------------
+                       -------------------------
+   12 00000000         
+   13 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+   14 00000000                 THUMB
+   15 00000000         
+   16 00000000         ; Se alguma função do arquivo for chamada em outro arqui
+                       vo 
+   17 00000000                 EXPORT           Start       ; Permite chamar a 
+                                                            função Start a part
+                                                            ir de 
+   18 00000000         ; outro arquivo. No caso startup.s
+   19 00000000         
+   20 00000000         ; Se chamar alguma função externa 
+   21 00000000         ;IMPORT <func>              ; Permite chamar dentro dest
+                       e arquivo uma 
+   22 00000000         ; função <func>
+   23 00000000         
+   24 00000000         ; ------------------------------------------------------
+                       --------------------------
+   25 00000000         
+   26 00000000         Start
+   27 00000000 F04F 000A       MOV              R0, #10     ;Salva no registrad
+                                                            or R0 o valor
+   28 00000004 F64C 4122       MOV              R1, #0xCC22 ;Salva no registrad
+                                                            or R1 o valor
+   29 00000008 F6CF 7111       MOVT             R1, #0xFF11 ;Salva no MSB do R1
+                                                             o valor
+   30 0000000C F240 42D2       MOV              R2, #1234   ;Salva no R2 o valo
+                                                            r
+   31 00000010 F44F 7340       MOV              R3, #0x300  ;Salva no R3 o valo
+                                                            r
+   32 00000014         
+   33 00000014 B401            PUSH             {R0}        ;Empurra para a pil
+                                                            ha o R0
+   34 00000016 B40E            PUSH             {R1-R3}     ;Empurra para a pil
+                                                            ha os R1, R2 e R3
+   35 00000018         
+   36 00000018 F04F 013C       MOV              R1, #60     ;Salva no registrad
+                                                            or R0 o valor
+   37 0000001C F64C 4222       MOV              R2, #0xCC22 ;Salva no registrad
+                                                            or R1 o valor
+   38 00000020         
+   39 00000020 BC0E            POP              {R1-R3}     ;Puxando da pilha
+   40 00000022 BC01            POP              {R0}        ;Puxando da pilha
+   41 00000024         
+   42 00000024         
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   43 00000024 BF00            NOP
+   44 00000026         
+   45 00000026         
+   46 00000026 00 00           ALIGN                        ; garante que o fim
+                                                             da seção está alin
+                                                            hada 
+   47 00000028                 END                          ; fim do arquivo
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\exemplo.d -o.\objects\exemplo.o -I.\RTE\_Target_1 -IC
+:\Keil\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 -IC:\Keil\ARM\CMSIS\
+Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 524" --
+predefine="TM4C1294NCPDT SETA 1" --list=.\listings\exemplo.lst exemplo.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 13 in file exemplo.s
+   Uses
+      None
+Comment: .text unused
+Start 00000000
+
+Symbol: Start
+   Definitions
+      At line 26 in file exemplo.s
+   Uses
+      At line 17 in file exemplo.s
+Comment: Start used once
+2 symbols
+336 symbols in table

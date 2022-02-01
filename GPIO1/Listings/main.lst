@@ -1,0 +1,312 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; main.s
+    2 00000000         ; Desenvolvido para a placa EK-TM4C1294XL
+    3 00000000         ; Prof. Guilherme Peron
+    4 00000000         ; 15/03/2018
+    5 00000000         ; Este programa espera o usuário apertar a chave USR_SW1
+                        e/ou a chave USR_SW2.
+    6 00000000         ; Caso o usuário pressione a chave USR_SW1, acenderá o L
+                       ED2. Caso o usuário pressione 
+    7 00000000         ; a chave USR_SW2, acenderá o LED1. Caso as duas chaves 
+                       sejam pressionadas, os dois 
+    8 00000000         ; LEDs acendem.
+    9 00000000         
+   10 00000000         ; ------------------------------------------------------
+                       -------------------------
+   11 00000000                 THUMB                        ; Instruções do tip
+                                                            o Thumb-2
+   12 00000000         ; ------------------------------------------------------
+                       -------------------------
+   13 00000000         ; Declarações EQU - Defines
+   14 00000000         ;<NOME>         EQU <VALOR>
+   15 00000000         ; ========================
+   16 00000000         ; Definições de Valores
+   17 00000000 00000001 
+                       BIT0    EQU              2_0001
+   18 00000000 00000002 
+                       BIT1    EQU              2_0010
+   19 00000000         
+   20 00000000         ; ------------------------------------------------------
+                       -------------------------
+   21 00000000         ; Área de Dados - Declarações de variáveis
+   22 00000000                 AREA             DATA, ALIGN=2
+   23 00000000         ; Se alguma variável for chamada em outro arquivo
+   24 00000000         ;EXPORT  <var> [DATA,SIZE=<tam>]   ; Permite chamar a va
+                       riável <var> a 
+   25 00000000         ; partir de outro arquivo
+   26 00000000         ;<var> SPACE <tam>                        ; Declara uma 
+                       variável de nome <var>
+   27 00000000         ; de <tam> bytes a partir da primeira 
+   28 00000000         ; posição da RAM  
+   29 00000000         
+   30 00000000         ; ------------------------------------------------------
+                       -------------------------
+   31 00000000         ; Área de Código - Tudo abaixo da diretiva a seguir será
+                        armazenado na memória de 
+   32 00000000         ;                  código
+   33 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+   34 00000000         
+   35 00000000         ; Se alguma função do arquivo for chamada em outro arqui
+                       vo 
+   36 00000000                 EXPORT           Start       ; Permite chamar a 
+                                                            função Start a part
+                                                            ir de 
+   37 00000000         ; outro arquivo. No caso startup.s
+   38 00000000         
+   39 00000000         ; Se chamar alguma função externa 
+   40 00000000         ;IMPORT <func>              ; Permite chamar dentro dest
+                       e arquivo uma 
+   41 00000000         ; função <func>
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   42 00000000                 IMPORT           GPIO_Init
+   43 00000000                 IMPORT           PortN_Output
+   44 00000000                 IMPORT           PortJ_Input
+   45 00000000         
+   46 00000000         ; ------------------------------------------------------
+                       -------------------------
+   47 00000000         ; Função main()
+   48 00000000         Start
+   49 00000000 F7FF FFFE       BL               GPIO_Init   ;Chama a subrotina 
+                                                            que inicializa os G
+                                                            PIO
+   50 00000004         
+   51 00000004         MainLoop
+   52 00000004 F7FF FFFE       BL               PortJ_Input ;Chama a subrotina 
+                                                            que lê o estado das
+                                                             chaves e coloca o 
+                                                            resultado em R0
+   53 00000008         Verifica_Nenhuma
+   54 00000008 2803            CMP              R0, #2_00000011 ;Verifica se ne
+                                                            nhuma chave está pr
+                                                            essionada
+   55 0000000A D104            BNE              Verifica_SW1 ;Se o teste viu qu
+                                                            e tem pelo menos al
+                                                            guma chave pression
+                                                            ada pula
+   56 0000000C F04F 0000       MOV              R0, #0      ;Não acender nenhum
+                                                             LED
+   57 00000010 F7FF FFFE       BL               PortN_Output ;Chamar a função p
+                                                            ara não acender nen
+                                                            hum LED
+   58 00000014 E7F6            B                MainLoop    ;Se o teste viu que
+                                                             nenhuma chave está
+                                                             pressionada, volta
+                                                             para o laço princi
+                                                            pal
+   59 00000016         Verifica_SW1
+   60 00000016 2802            CMP              R0, #2_00000010 ;Verifica se so
+                                                            mente a chave SW1 e
+                                                            stá pressionada
+   61 00000018 D104            BNE              Verifica_SW2 ;Se o teste falhou
+                                                            , pula
+   62 0000001A F04F 0001       MOV              R0, #BIT0   ;Setar o parâmetro 
+                                                            de entrada da funçã
+                                                            o como o BIT0
+   63 0000001E F7FF FFFE       BL               PortN_Output ;Chamar a função p
+                                                            ara setar o LED1
+   64 00000022 E7EF            B                MainLoop    ;Volta para o laço 
+                                                            principal
+   65 00000024         Verifica_SW2
+   66 00000024 2801            CMP              R0, #2_00000001 ;Verifica se so
+                                                            mente a chave SW2 e
+                                                            stá pressionada
+   67 00000026 D104            BNE              Verifica_Ambas ;Se o teste falh
+                                                            ou, pula
+   68 00000028 F04F 0002       MOV              R0, #BIT1   ;Setar o parâmetro 
+                                                            de entrada da funçã
+                                                            o como o BIT2
+   69 0000002C F7FF FFFE       BL               PortN_Output ;Chamar a função p
+                                                            ara setar o LED2
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+   70 00000030 E7E8            B                MainLoop    ;Volta para o laço 
+                                                            principal 
+   71 00000032         Verifica_Ambas
+   72 00000032 2800            CMP              R0, #2_00000000 ;Verifica se am
+                                                            bas as chaves estão
+                                                             pressionadas
+   73 00000034 D1E6            BNE              MainLoop    ;Se o teste falhou,
+                                                             pula
+   74 00000036 F04F 0001       MOV              R0, #BIT0   ;Setar o parâmetro 
+                                                            de entrada da funçã
+                                                            o como o BIT0
+   75 0000003A F040 0002       ORR              R0, #BIT1   ;e o BIT1
+   76 0000003E F7FF FFFE       BL               PortN_Output ;Chamar a função p
+                                                            ara acender os dois
+                                                             LEDs
+   77 00000042 E7DF            B                MainLoop    ;Volta para o laço 
+                                                            principal 
+   78 00000044         
+   79 00000044         
+   80 00000044                 ALIGN                        ;Garante que o fim 
+                                                            da seção está alinh
+                                                            ada 
+   81 00000044                 END                          ;Fim do arquivo
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\main.d -o.\objects\main.o -I.\RTE\_Target_1 -IC:\Keil
+_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 -IC:\Keil_v5\ARM\CMSIS\
+Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 526" --
+predefine="TM4C1294NCPDT SETA 1" --list=.\listings\main.lst main.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+DATA 00000000
+
+Symbol: DATA
+   Definitions
+      At line 22 in file main.s
+   Uses
+      None
+Comment: DATA unused
+1 symbol
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 33 in file main.s
+   Uses
+      None
+Comment: .text unused
+MainLoop 00000004
+
+Symbol: MainLoop
+   Definitions
+      At line 51 in file main.s
+   Uses
+      At line 58 in file main.s
+      At line 64 in file main.s
+      At line 70 in file main.s
+      At line 73 in file main.s
+      At line 77 in file main.s
+
+Start 00000000
+
+Symbol: Start
+   Definitions
+      At line 48 in file main.s
+   Uses
+      At line 36 in file main.s
+Comment: Start used once
+Verifica_Ambas 00000032
+
+Symbol: Verifica_Ambas
+   Definitions
+      At line 71 in file main.s
+   Uses
+      At line 67 in file main.s
+Comment: Verifica_Ambas used once
+Verifica_Nenhuma 00000008
+
+Symbol: Verifica_Nenhuma
+   Definitions
+      At line 53 in file main.s
+   Uses
+      None
+Comment: Verifica_Nenhuma unused
+Verifica_SW1 00000016
+
+Symbol: Verifica_SW1
+   Definitions
+      At line 59 in file main.s
+   Uses
+      At line 55 in file main.s
+Comment: Verifica_SW1 used once
+Verifica_SW2 00000024
+
+Symbol: Verifica_SW2
+   Definitions
+      At line 65 in file main.s
+   Uses
+      At line 61 in file main.s
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+Comment: Verifica_SW2 used once
+7 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+BIT0 00000001
+
+Symbol: BIT0
+   Definitions
+      At line 17 in file main.s
+   Uses
+      At line 62 in file main.s
+      At line 74 in file main.s
+
+BIT1 00000002
+
+Symbol: BIT1
+   Definitions
+      At line 18 in file main.s
+   Uses
+      At line 68 in file main.s
+      At line 75 in file main.s
+
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+GPIO_Init 00000000
+
+Symbol: GPIO_Init
+   Definitions
+      At line 42 in file main.s
+   Uses
+      At line 49 in file main.s
+Comment: GPIO_Init used once
+PortJ_Input 00000000
+
+Symbol: PortJ_Input
+   Definitions
+      At line 44 in file main.s
+   Uses
+      At line 52 in file main.s
+Comment: PortJ_Input used once
+PortN_Output 00000000
+
+Symbol: PortN_Output
+   Definitions
+      At line 43 in file main.s
+   Uses
+      At line 57 in file main.s
+      At line 63 in file main.s
+      At line 69 in file main.s
+      At line 76 in file main.s
+
+3 symbols
+347 symbols in table

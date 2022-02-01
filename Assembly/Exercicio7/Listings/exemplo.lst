@@ -1,0 +1,152 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; Exemplo.s
+    2 00000000         ; Desenvolvido para a placa EK-TM4C1294XL
+    3 00000000         ; Prof. Guilherme Peron
+    4 00000000         ; 12/03/2018
+    5 00000000         
+    6 00000000         
+    7 00000000         ; ------------------------------------------------------
+                       -------------------------
+    8 00000000         ; Declarações EQU
+    9 00000000         ;<NOME>         EQU <VALOR>
+   10 00000000         
+   11 00000000         ; ------------------------------------------------------
+                       -------------------------
+   12 00000000         
+   13 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+   14 00000000                 THUMB
+   15 00000000         
+   16 00000000         ; Se alguma função do arquivo for chamada em outro arqui
+                       vo 
+   17 00000000                 EXPORT           Start       ; Permite chamar a 
+                                                            função Start a part
+                                                            ir de 
+   18 00000000         ; outro arquivo. No caso startup.s
+   19 00000000         
+   20 00000000         ; Se chamar alguma função externa 
+   21 00000000         ;IMPORT <func>              ; Permite chamar dentro dest
+                       e arquivo uma 
+   22 00000000         ; função <func>
+   23 00000000         
+   24 00000000         ; ------------------------------------------------------
+                       --------------------------
+   25 00000000         
+   26 00000000         Start
+   27 00000000 F04F 000A       MOV              R0, #10     ;Salva no registrad
+                                                            or R0 o valor
+   28 00000004         loop1
+   29 00000004 F100 0005       ADD              R0, #5      ;Salva no registrad
+                                                            or R1 o valor
+   30 00000008 2832            CMP              R0, #50     ;Compara o R0 com o
+                                                             número 50
+   31 0000000A D1FB            BNE              loop1       ;Se não for igual a
+                                                             50, continua 
+   32 0000000C F000 F802       BL               Func1
+   33 00000010 BF00            NOP
+   34 00000012 E7FE    fim     B                fim
+   35 00000014         
+   36 00000014         ; ------------------------------------------------------
+                       ---------------------------
+   37 00000014         Func1
+   38 00000014 4601            MOV              R1, R0      ;Copia R0 para R1
+   39 00000016 2932            CMP              R1, #50     ;Compara R1 com 50
+   40 00000018 DA02            BGE              else        ;Se a comparação fo
+                                                            r maior ou igual va
+                                                            i para else
+   41 0000001A F101 0101       ADD              R1, R1, #1  ;Se for menor, incr
+                                                            ementa
+   42 0000001E E001            B                pula        ;Tem que pular para
+                                                             não executar a lin
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+                                                            ha de baixo
+   43 00000020 F06F 0131 
+                       else    MOV              R1, #-50    ;Muda o R1 para -50
+                                                            
+   44 00000024 4770    pula    BX               LR          ;Retorna da função
+   45 00000026         ; ------------------------------------------------------
+                       ---------------------------
+   46 00000026         
+   47 00000026 00 00           ALIGN                        ; garante que o fim
+                                                             da seção está alin
+                                                            hada 
+   48 00000028                 END                          ; fim do arquivo
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\exemplo.d -o.\objects\exemplo.o -I.\RTE\_Target_1 -IC
+:\Keil\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 -IC:\Keil\ARM\CMSIS\
+Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 524" --
+predefine="TM4C1294NCPDT SETA 1" --list=.\listings\exemplo.lst exemplo.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 13 in file exemplo.s
+   Uses
+      None
+Comment: .text unused
+Func1 00000014
+
+Symbol: Func1
+   Definitions
+      At line 37 in file exemplo.s
+   Uses
+      At line 32 in file exemplo.s
+Comment: Func1 used once
+Start 00000000
+
+Symbol: Start
+   Definitions
+      At line 26 in file exemplo.s
+   Uses
+      At line 17 in file exemplo.s
+Comment: Start used once
+else 00000020
+
+Symbol: else
+   Definitions
+      At line 43 in file exemplo.s
+   Uses
+      At line 40 in file exemplo.s
+Comment: else used once
+fim 00000012
+
+Symbol: fim
+   Definitions
+      At line 34 in file exemplo.s
+   Uses
+      At line 34 in file exemplo.s
+Comment: fim used once
+loop1 00000004
+
+Symbol: loop1
+   Definitions
+      At line 28 in file exemplo.s
+   Uses
+      At line 31 in file exemplo.s
+Comment: loop1 used once
+pula 00000024
+
+Symbol: pula
+   Definitions
+      At line 44 in file exemplo.s
+   Uses
+      At line 42 in file exemplo.s
+Comment: pula used once
+7 symbols
+341 symbols in table

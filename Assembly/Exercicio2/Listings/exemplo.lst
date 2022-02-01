@@ -1,0 +1,115 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; Exemplo.s
+    2 00000000         ; Desenvolvido para a placa EK-TM4C1294XL
+    3 00000000         ; Prof. Guilherme Peron
+    4 00000000         ; 12/03/2018
+    5 00000000         
+    6 00000000         
+    7 00000000         ; ------------------------------------------------------
+                       -------------------------
+    8 00000000         ; Declarações EQU
+    9 00000000         ;<NOME>         EQU <VALOR>
+   10 00000000         
+   11 00000000         ; ------------------------------------------------------
+                       -------------------------
+   12 00000000         
+   13 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+   14 00000000                 THUMB
+   15 00000000         
+   16 00000000         ; Se alguma função do arquivo for chamada em outro arqui
+                       vo 
+   17 00000000                 EXPORT           Start       ; Permite chamar a 
+                                                            função Start a part
+                                                            ir de 
+   18 00000000         ; outro arquivo. No caso startup.s
+   19 00000000         
+   20 00000000         ; Se chamar alguma função externa 
+   21 00000000         ;IMPORT <func>              ; Permite chamar dentro dest
+                       e arquivo uma 
+   22 00000000         ; função <func>
+   23 00000000         
+   24 00000000         ; ------------------------------------------------------
+                       --------------------------
+   25 00000000         Start
+   26 00000000 F04F 00F0       MOV              R0, #0xF0   ;Salva no registrad
+                                                            or R0 o valor hexa 
+                                                            0xF0
+   27 00000004 F010 0055       ANDS             R0, #2_01010101 ;AND do R0 com 
+                                                            o binário 01010101 
+                                                            e salva em R0
+   28 00000008         
+   29 00000008 F04F 01CC       MOV              R1, #2_11001100 ;Salva no regis
+                                                            trador R1 o valor b
+                                                            inário 11001100
+   30 0000000C F011 0133       ANDS             R1, #2_00110011 ;AND do R1 com 
+                                                            o binário 00110011 
+                                                            e salva em R1  
+   31 00000010         
+   32 00000010 F04F 0280       MOV              R2, #0x80   ;Salva no registrad
+                                                            or R2 o valor binár
+                                                            io 10000000
+   33 00000014 F052 0237       ORRS             R2, #2_00110111 ;OR do R2 com o
+                                                             binário 00110111 e
+                                                             salva em R2  
+   34 00000018         
+   35 00000018 F64A 33CD       MOV              R3, #0xABCD ;Salva no registrad
+                                                            or R3 o valor binár
+                                                            io ABCD
+   36 0000001C F6CA 33CD       MOVT             R3, #0xABCD ;Salva nos MSB regi
+                                                            strador R3 o valor 
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+                                                            binário ABCD
+   37 00000020 F64F 74FF       MOV              R4, #0xFFFF
+   38 00000024 43A3            BICS             R3, R4      ;AND do R1 com o bi
+                                                            nário 0xFFFF0000 e 
+                                                            salva em R3  
+   39 00000026         
+   40 00000026 BF00            NOP
+   41 00000028         
+   42 00000028         ; Comece o código aqui <================================
+                       ======================
+   43 00000028         
+   44 00000028                 ALIGN                        ; garante que o fim
+                                                             da seção está alin
+                                                            hada 
+   45 00000028                 END                          ; fim do arquivo
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\exemplo.d -o.\objects\exemplo.o -I.\RTE\_Target_1 -IC
+:\Keil\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 -IC:\Keil\ARM\CMSIS\
+Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 524" --
+predefine="TM4C1292NCPDT SETA 1" --list=.\listings\exemplo.lst exemplo.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 13 in file exemplo.s
+   Uses
+      None
+Comment: .text unused
+Start 00000000
+
+Symbol: Start
+   Definitions
+      At line 25 in file exemplo.s
+   Uses
+      At line 17 in file exemplo.s
+Comment: Start used once
+2 symbols
+336 symbols in table

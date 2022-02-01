@@ -1,0 +1,142 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; Exemplo.s
+    2 00000000         ; Desenvolvido para a placa EK-TM4C1294XL
+    3 00000000         ; Prof. Guilherme Peron
+    4 00000000         ; 12/03/2018
+    5 00000000         
+    6 00000000         
+    7 00000000         ; ------------------------------------------------------
+                       -------------------------
+    8 00000000         ; Declarações EQU
+    9 00000000         ;<NOME>         EQU <VALOR>
+   10 00000000         
+   11 00000000         ; ------------------------------------------------------
+                       -------------------------
+   12 00000000         
+   13 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+   14 00000000                 THUMB
+   15 00000000         
+   16 00000000         ; Se alguma função do arquivo for chamada em outro arqui
+                       vo 
+   17 00000000                 EXPORT           Start       ; Permite chamar a 
+                                                            função Start a part
+                                                            ir de 
+   18 00000000         ; outro arquivo. No caso startup.s
+   19 00000000         
+   20 00000000         ; Se chamar alguma função externa 
+   21 00000000         ;IMPORT <func>              ; Permite chamar dentro dest
+                       e arquivo uma 
+   22 00000000         ; função <func>
+   23 00000000         
+   24 00000000         ; ------------------------------------------------------
+                       --------------------------
+   25 00000000         Start
+   26 00000000 F240 20BD       MOV              R0, #701    ;Salva no registrad
+                                                            or R0 o valor 
+   27 00000004 0940            LSRS             R0, #5      ;Desloca 5 bits par
+                                                            a a direita e atual
+                                                            iza o C
+   28 00000006         
+   29 00000006 F647 5143       MOV              R1, #32067  ;Salva no registrad
+                                                            or R1 o valor 
+   30 0000000A EA6F 0101       MVN              R1, R1      ;Transformar R1 em 
+                                                            negativo
+   31 0000000E 0909            LSRS             R1, #4      ;Desloca 4 bits par
+                                                            a a direita e atual
+                                                            iza o C  
+   32 00000010         
+   33 00000010 F240 22BD       MOV              R2, #701    ;Salva no registrad
+                                                            or R2 o valor 
+   34 00000014 10D2            ASRS             R2, #3      ;Desloca 3 bits par
+                                                            a a direita e atual
+                                                            iza o C  
+   35 00000016         
+   36 00000016 F647 5343       MOV              R3, #32067  ;Salva no registrad
+                                                            or R3 o valor 
+   37 0000001A EA6F 0303       MVN              R3, R3      ;Transformar R3 em 
+                                                            negativo
+   38 0000001E 115B            ASRS             R3, #5      ;Desloca 5 bits par
+                                                            a a direita e atual
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+                                                            iza o C
+   39 00000020         
+   40 00000020 F04F 04FF       MOV              R4, #255    ;Salva no registrad
+                                                            or R4 o valor 
+   41 00000024 0224            LSLS             R4, #8      ;Desloca 8 bits par
+                                                            a a esquerda e atua
+                                                            liza o C
+   42 00000026         
+   43 00000026 F24E 6566       MOV              R5, #58982  ;Salva no registrad
+                                                            or R5 o valor 
+   44 0000002A EA6F 0505       MVN              R5, R5      ;Transformar R3 em 
+                                                            negativo
+   45 0000002E 04AD            LSLS             R5, #18     ;Desloca 18 bits pa
+                                                            ra a esquerda e atu
+                                                            aliza o C
+   46 00000030         
+   47 00000030 F241 2634       MOV              R6, #0x1234 ;Salva no registrad
+                                                            or R6 o valor 
+   48 00000034 F6CF 26BC       MOVT             R6, #0xFABC ;Salva nos MSBs do 
+                                                            registrador R6 o va
+                                                            lor
+   49 00000038 EA4F 26B6       ROR              R6, #10     ;Rotaciona 10 bits 
+                                                            para a direita e at
+                                                            ualiza o C 
+   50 0000003C         
+   51 0000003C F244 3721       MOV              R7, #0x4321 ;Salva no registrad
+                                                            or R6 o valor 
+   52 00000040 EA5F 0737       RRXS             R7, R7      ;Rotaciona um bit p
+                                                            ra direita e atuali
+                                                            za o C
+   53 00000044 EA5F 0737       RRXS             R7, R7      ;Rotaciona um bit p
+                                                            ra direita e atuali
+                                                            za o C 
+   54 00000048         
+   55 00000048         
+   56 00000048 BF00            NOP
+   57 0000004A         
+   58 0000004A         
+   59 0000004A 00 00           ALIGN                        ; garante que o fim
+                                                             da seção está alin
+                                                            hada 
+   60 0000004C                 END                          ; fim do arquivo
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\exemplo.d -o.\objects\exemplo.o -I.\RTE\_Target_1 -IC
+:\Keil\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 -IC:\Keil\ARM\CMSIS\
+Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 524" --
+predefine="TM4C1294NCPDT SETA 1" --list=.\listings\exemplo.lst exemplo.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 13 in file exemplo.s
+   Uses
+      None
+Comment: .text unused
+Start 00000000
+
+Symbol: Start
+   Definitions
+      At line 25 in file exemplo.s
+   Uses
+      At line 17 in file exemplo.s
+Comment: Start used once
+2 symbols
+336 symbols in table
